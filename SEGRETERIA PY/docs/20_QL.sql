@@ -1,0 +1,1 @@
+SELECT id, nome, matricola, diplomato, data_iscrizione FROM studente; 
