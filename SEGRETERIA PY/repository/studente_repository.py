@@ -69,6 +69,20 @@ def delete_all():
         with conn.cursor() as cur:
             # ALTER SEQUENCE --> Resetto anche la sequence per far ripartire id da 1 
             cur.execute("DELETE FROM public.studenti; ALTER SEQUENCE studenti_id_seq RESTART WITH 1; ")
+
+def delete_by_id(studente_id): 
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            # ALTER SEQUENCE --> Resetto anche la sequence per far ripartire id da 1 
+            cur.execute("DELETE FROM public.studenti WHERE id = %s RETURNING id, nome, matricola, diplomato, data_iscrizione ", (studente_id,))
+
+            row = cur.fetchone()
+
+            if row is None:
+                return None
+
+            return _row_to_studente(row)
+
     
 
 # Get All / Get by ID
@@ -83,6 +97,18 @@ def get_all():
 
             # itera su tutte le tuple lette dal database e ritorna una lista di oggetti (da _row_to_studente)
             return [_row_to_studente(row) for row in rows]
+         
+def get_by_id(studente_id):
+    with get_connection() as conn:
+        with conn.cursor() as cur:
+            cur.execute("SELECT id, nome, matricola, diplomato, data_iscrizione FROM studenti WHERE id = %s", (studente_id,))
+
+            row = cur.fetchone()
+
+            if row is None:
+                return None
+
+            return _row_to_studente(row)
 
 
 
