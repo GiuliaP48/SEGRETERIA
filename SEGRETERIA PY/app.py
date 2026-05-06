@@ -27,3 +27,6 @@ for s in studente_repository.get_all():
 s3.nome = "Nome Studente S3 AGGIORNATO"
 s3 = studente_repository.update(s3.id, s3); 
 print(s3)
+
+print(studente_repository.get_by_id("2"))
+print(studente_repository.delete_by_id("3"))
